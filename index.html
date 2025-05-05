@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <title>Wetterstationen Euregio Beispiel</title>
+
+    <!-- Icon für Browser-Tab -->
+    <link rel="shortcut icon" href="icons/wifi.png" type="image/x-icon">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+        integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- Leaflet ding-->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+    <!-- Leaflet providers -->
+    <script src="https://unpkg.com/leaflet-providers@latest/leaflet-providers.js"></script>
+
+    <!-- eigene Stile und Hauptskript -->
+    <link rel="stylesheet" href="main.css">
+    <script defer src="main.js"></script>
+</head>
+
+<body>
+    <main>
+        <header>
+            <h2><i class="fa-solid fa-cloud-sun-rain"></i> Wetterstationen Euregio Beispiel</h2>
+            <nav>
+                <i class="fab fa-github"></i> <a href="https://github.com/webmapping/aws">Github</a>
+            </nav>
+        </header>
+        <article>
+            <div id="map"></div>
+        </article>
+        <footer>
+            <strong>Datenquellen:</strong>
+            <nav>
+                <a href="https://lawinen.report/">Lawinen.report</a> |
+                <a href="https://static.avalanche.report/weather_stations/stations.geojson">GeoJSON Daten</a> |
+                <a href="https://www.data.gv.at/katalog/de/dataset/land-tirol_wetterstationsdatentirol">Metadaten</a>
+            </nav>
+        </footer>
+    </main>
+</body>
+
+</html>
