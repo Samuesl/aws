@@ -33,12 +33,24 @@ L.control.scale({
     imperial: false,
 }).addTo(map);
 
-// Wetterstationen
+//Wetterstationen mit Icons und Popups
 async function loadStations(url) {
+    console.log(url);
     let response = await fetch(url);
     let jsondata = await response.json();
-
-    // Wetterstationen mit Icons und Popups
-
+    console.log(jsondata);
+    L.geoJSON(jsondata, {
+        attribution: "Datenquelle: <a href='https://www.data.gv.at'> Stadt Wien</a>",
+        pointToLayer: function (feature, latlng) {
+            return L.marker(latlng, {
+                icon: L.icon({
+                    iconUrl: "icons/wifi.png",
+                    iconAnchor: [16, 37],
+                    popupAnchor: [0, -37]
+                })
+            });
+        },
+        
+    }).addTo(overlays.stations);
 }
 loadStations("https://static.avalanche.report/weather_stations/stations.geojson");
