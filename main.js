@@ -13,6 +13,7 @@ let map = L.map("map").setView([ibk.lat, ibk.lng], ibk.zoom);
 // thematische Layer
 let overlays = {
     stations: L.featureGroup().addTo(map),
+    temperature: L.featureGroup(),
 }
 
 // Layer control
@@ -26,6 +27,7 @@ L.control.layers({
     "Esri WorldImagery": L.tileLayer.provider("Esri.WorldImagery"),
 }, {
     "Wetterstationen": overlays.stations,
+    "Temperatur": overlays.temperature,
 }).addTo(map);
 
 // Maßstab
