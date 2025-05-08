@@ -59,15 +59,29 @@ async function loadStations(url) {
             layer.bindPopup(`
                     <h4></i>${feature.properties.name} (${feature.geometry.coordinates[2]}) m</h4>
                     <ul>
-                    <li> Lufttemperatur (C) ${feature.properties.LT!== undefined ? feature.properties.LT : "-"}</li> 
+                    <li> Lufttemperatur (C) ${feature.properties.LT !== undefined ? feature.properties.LT : "-"}</li> 
                     <!-- Kommentar: das || ist die or Funktion (siehe unten) --> 
-                    <li> relative Luftfreuchte (%) ${feature.properties.RH|| "-"}</li>
-                    <li> Windgeschwindigkeit (km/h) ${feature.properties.WG|| "-"}</li>
+                    <li> relative Luftfreuchte (%) ${feature.properties.RH || "-"}</li>
+                    <li> Windgeschwindigkeit (km/h) ${feature.properties.WG || "-"}</li>
                     <li> Schneehöhe (cm) ${feature.properties.HS || "-"}</li>
                     </ul>
                     <span>${pointInTime.toLocaleString()}</span>
                  `);
-        } 
+        }
     }).addTo(overlays.stations);
+    showTemperature(jsondata);
 }
 loadStations("https://static.avalanche.report/weather_stations/stations.geojson");
+
+function showTemperature(jsondata) {
+    L.geoJSON(jsondata, {
+        pointToLayer: function (feature, latlng) {
+            return L.marker(latlng, {
+                icon: L.divIcon({
+                    className: "aws-div-icon",
+                    html: `<span>${feature.properties.LT}</span>`
+                }),
+            })
+        },
+    }).addTo(overlays.temperature);
+}
