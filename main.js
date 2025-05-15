@@ -72,7 +72,6 @@ async function loadStations(url) {
         },
         onEachFeature: function (feature, layer) {
             let pointInTime = new Date(feature.properties.date);
-            layer.bindPopup("Hallo");
             layer.bindPopup(`
                     <h4></i>${feature.properties.name} (${feature.geometry.coordinates[2]}) m</h4>
                     <ul>
@@ -125,7 +124,7 @@ function showWind(jsondata) {
             let color = getColor(feature.properties.WG, COLORS.wind);
             return L.marker(latlng, {
                 icon: L.divIcon({
-                    className: "aws-div-icon",
+                    className: "aws-div-icon-wind",
                     html: `<span style = "background-color:${color}">${feature.properties.WG.toFixed(1)}</span>`
                 }),
             })
@@ -134,7 +133,7 @@ function showWind(jsondata) {
 }
 
 //Schneehöhe
-function showWind(jsondata) {
+function showSnow(jsondata) {
     L.geoJSON(jsondata, {
         filter: function (feature) {
             console.log(feature.properties)
