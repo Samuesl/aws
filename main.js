@@ -41,7 +41,7 @@ L.control.scale({
     imperial: false,
 }).addTo(map);
 
-//Rainviewer
+//Rainviewer Regen
 L.control.rainviewer({
     position: 'bottomleft',
     nextButtonText: '>',
@@ -77,7 +77,6 @@ async function loadStations(url) {
                     <h4></i>${feature.properties.name} (${feature.geometry.coordinates[2]}) m</h4>
                     <ul>
                     <li> Lufttemperatur (C) ${feature.properties.LT !== undefined ? feature.properties.LT : "-"}</li> 
-                    <!-- Kommentar: das || ist die or Funktion (siehe unten) --> 
                     <li> relative Luftfreuchte (%) ${feature.properties.RH || "-"}</li>
                     <li> Windgeschwindigkeit (km/h) ${feature.properties.WG || "-"}</li>
                     <li> Schneehöhe (cm) ${feature.properties.HS || "-"}</li>

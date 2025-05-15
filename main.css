@@ -63,6 +63,19 @@ footer nav {
         1px 1px 0 white;
 }
 
+.aws-div-icon-wind span {
+    border: 1px solid silver;
+    border-radius: 0.5em;
+    font-size: 1.25em;
+    font-weight: bold;
+    padding: 0.5em;
+    text-shadow: 
+        -1px -1px 0 white,
+        -1px 1px 0 white,
+        1px -1px 0 white,
+        1px 1px 0 white;
+}
+
 .aws-div-icon-snow span{
 
 
@@ -77,17 +90,6 @@ footer nav {
         1px 1px 0 white;
 }
 
-.aws-div-icon-wind span {
-    border: 1px solid silver;
-    border-radius: 0.5em;
-    font-size: 1.25em;
-    font-weight: bold;
-    padding: 0.5em;
-    text-shadow: 
-        -1px -1px 0 white,
-        -1px 1px 0 white,
-        1px -1px 0 white,
-        1px 1px 0 white;
-}
+
 
 
