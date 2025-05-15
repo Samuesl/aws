@@ -23,7 +23,8 @@ let overlays = {
 L.control.layers({
     "Relief avalanche.report": L.tileLayer(
         "https://static.avalanche.report/tms/{z}/{x}/{y}.webp", {
-        attribution: `© <a href="https://sonny.4lima.de">Sonny</a>, <a href="https://www.eea.europa.eu/en/datahub/datahubitem-view/d08852bc-7b5f-4835-a776-08362e2fbf4b">EU-DEM</a>, <a href="https://lawinen.report/">avalanche.report</a>, all licensed under <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>`
+        attribution: `© <a href="https://sonny.4lima.de">Sonny</a>, <a href="https://www.eea.europa.eu/en/datahub/datahubitem-view/d08852bc-7b5f-4835-a776-08362e2fbf4b">EU-DEM</a>, <a href="https://lawinen.report/">avalanche.report</a>, all licensed under <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>`,
+        maxZoom: 12
     }).addTo(map),
     "OpenStreetMap": L.tileLayer.provider("OpenStreetMap.Mapnik"),
     "OpenTopoMap": L.tileLayer.provider("OpenTopoMap"),
