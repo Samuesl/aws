@@ -41,6 +41,18 @@ L.control.scale({
     imperial: false,
 }).addTo(map);
 
+//Rainviewer
+L.control.rainviewer({
+    position: 'bottomleft',
+    nextButtonText: '>',
+    playStopButtonText: 'Play/Stop',
+    prevButtonText: '<',
+    positionSliderLabelText: "Hour:",
+    opacitySliderLabelText: "Opacity:",
+    animationInterval: 500,
+    opacity: 0.5
+}).addTo(map);
+
 //Wetterstationen mit Icons und Popups
 async function loadStations(url) {
     console.log(url);
