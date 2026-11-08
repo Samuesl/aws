@@ -1,0 +1,15 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Generate weather station GeoJSON",
+			"type": "shell",
+			"command": "node",
+			"args": [
+				"aws-main/scripts/update-stations.js"
+			],
+			"isBackground": false,
+			"problemMatcher": []
+		}
+	]
+}
