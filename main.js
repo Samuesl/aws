@@ -55,13 +55,78 @@ L.control.rainviewer({
 }).addTo(map);
 
 //Wetterstationen mit Icons und Popups
-async function loadStations(url) {
-    console.log(url);
+async function loadStationData(url) {
     let response = await fetch(url);
-    let jsondata = await response.json();
-    console.log(jsondata);
+    if (!response.ok) {
+        throw new Error(`Wetterstationen konnten nicht geladen werden: ${url} (${response.status})`);
+    }
+    return response.json();
+}
+
+function normalizeStation(feature, isAdditionalFeed) {
+    let properties = feature.properties;
+    let temperature = properties.LT ?? (properties.TA !== undefined ? properties.TA - 273.15 : undefined);
+    let windSpeed = properties.WG ?? (properties.VW !== undefined ? properties.VW * 3.6 : undefined);
+    let snowDepth = properties.HS;
+    let relativeHumidity = properties.RH;
+
+    if (isAdditionalFeed) {
+        if (snowDepth !== undefined) {
+            snowDepth *= 100;
+        }
+        if (relativeHumidity !== undefined && relativeHumidity <= 1) {
+            relativeHumidity *= 100;
+        }
+    }
+
+    return {
+        ...feature,
+        properties: {
+            ...properties,
+            LT: temperature,
+            WG: windSpeed,
+            HS: snowDepth,
+            RH: relativeHumidity,
+            WR: properties.WR ?? properties.DW,
+        },
+    };
+}
+
+async function loadStations() {
+    let [avalancheResult, additionalResult] = await Promise.allSettled([
+        loadStationData("https://static.avalanche.report/weather_stations/stations.geojson"),
+        loadStationData("https://lawinen.report/eaws_weather_stations/linea.geojson"),
+    ]);
+    let featuresById = new Map();
+
+    if (additionalResult.status === "fulfilled") {
+        for (let feature of additionalResult.value.features) {
+            featuresById.set(feature.id, normalizeStation(feature, true));
+        }
+    } else {
+        console.error("Der zusätzliche Wetterstations-Feed konnte nicht geladen werden.", additionalResult.reason);
+    }
+
+    if (avalancheResult.status === "fulfilled") {
+        for (let feature of avalancheResult.value.features) {
+            featuresById.set(feature.id, normalizeStation(feature, false));
+        }
+    } else {
+        console.error("Der avalanche.report-Wetterstations-Feed konnte nicht geladen werden.", avalancheResult.reason);
+    }
+
+    if (!featuresById.size) {
+        console.error("Es konnten keine Wetterstationen geladen werden.");
+        return;
+    }
+
+    let jsondata = {
+        type: "FeatureCollection",
+        features: [...featuresById.values()],
+    };
+
     L.geoJSON(jsondata, {
-        attribution: "Datenquelle: <a href='https://www.data.gv.at'> Stadt Wien</a>",
+        attribution: "Datenquellen: <a href='https://lawinen.report/eaws_weather_stations/linea.geojson'>Lawinen.report</a>, <a href='https://static.avalanche.report/weather_stations/stations.geojson'>avalanche.report</a>",
         pointToLayer: function (feature, latlng) {
             return L.marker(latlng, {
                 icon: L.icon({
@@ -73,13 +138,14 @@ async function loadStations(url) {
         },
         onEachFeature: function (feature, layer) {
             let pointInTime = new Date(feature.properties.date);
+            let altitude = feature.geometry.coordinates[2] || feature.properties.altitude;
             layer.bindPopup(`
-                    <h4></i>${feature.properties.name} (${feature.geometry.coordinates[2]}) m</h4>
+                    <h4>${feature.properties.name} (${altitude || "-"} m)</h4>
                     <ul>
                     <li> Lufttemperatur (C) ${feature.properties.LT !== undefined ? feature.properties.LT : "-"}</li> 
-                    <li> relative Luftfreuchte (%) ${feature.properties.RH || "-"}</li>
-                    <li> Windgeschwindigkeit (km/h) ${feature.properties.WG || "-"}</li>
-                    <li> Schneehöhe (cm) ${feature.properties.HS || "-"}</li>
+                    <li> relative Luftfeuchte (%) ${feature.properties.RH ?? "-"}</li>
+                    <li> Windgeschwindigkeit (km/h) ${feature.properties.WG ?? "-"}</li>
+                    <li> Schneehöhe (cm) ${feature.properties.HS ?? "-"}</li>
                     </ul>
                     <span>${pointInTime.toLocaleString()}</span>
                  `);
@@ -90,7 +156,7 @@ async function loadStations(url) {
     showSnow(jsondata);
     showDirect(jsondata);
 }
-loadStations("https://static.avalanche.report/weather_stations/stations.geojson");
+loadStations();
 
 function showTemperature(jsondata) {
     L.geoJSON(jsondata, {
@@ -160,7 +226,7 @@ function showDirect(jsondata) {
     L.geoJSON(jsondata, {
         filter: function (feature) {
             console.log(feature.properties)
-            if (feature.properties.WR > 0 && feature.properties.WR < 400) {
+            if (feature.properties.WR >= 0 && feature.properties.WR < 400) {
                 return true;
             }
         },
@@ -185,5 +251,3 @@ function getColor(value, ramp) {
         }
     }
 }
-
-
